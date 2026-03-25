@@ -11,10 +11,19 @@ while True:
     conn, addr = s.accept()
 
     print(f"Connection from {addr}")
+    
+    while True:
+        data = conn.recv(1024)
 
-    data = conn.recv(1024)
+        if not data:
+            break
 
-    print(f"Client said: {data.decode()}")
-    conn.send(b"Echo: " + data)
+        msg = data.decode().strip()
+    
+        if msg == "exit":
+            break
+
+        print(f"Client said: {msg}") 
+        conn.send(f"Echo: {msg}\n".encode())
 
     conn.close()
